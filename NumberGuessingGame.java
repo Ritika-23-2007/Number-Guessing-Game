@@ -4,14 +4,18 @@ import java.util.ArrayList;
 public class NumberGuessingGame {
     public static void playGame(Scanner sc, Random random) {
 
-        // Generate a random number between 0 and 99
-        int limit = 100;
-        int maxAttempts = 5; // Default max attempts, can be modified as needed
-        int numberToGuess = random.nextInt(limit) ;
+        // Welcome message and instructions.
+        System.out.println("Welcome to the Number Guessing Game!");
+        System.out.println("Choose your difficulty level:");
+
+        // Set the difficulty level and the parametres for the game.
+        int[] difficultySettings = setDifficulty(sc);
+        int limit = difficultySettings[0];
+        int maxAttempts = difficultySettings[1];
         ArrayList<Integer> previousGuesses = new ArrayList<>(maxAttempts);
 
-        // Welcome message and instructions
-        System.out.println("Welcome to the Number Guessing Game!");
+        //generating random number and start the game.
+        int numberToGuess = random.nextInt(limit) ;
         System.out.println("You have to guess a number between 0 and " + (limit - 1) + ".");
         System.out.println("You have " + maxAttempts + " attempts to guess the number. Good luck!");
         int userGuess = getUserInput(sc);
@@ -74,6 +78,39 @@ public class NumberGuessingGame {
         return userInput;
     }
 
+    public static int[] setDifficulty(Scanner sc) {
+        int defaultLimit = 100;
+        int defaultMaxAttempts = 5;
+        System.out.println("Write number to set difficulty: (1) Easy (2) Medium (3) Hard");
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Defaulting to Medium difficulty.");
+            sc.nextLine(); // Consume the invalid input
+            return new int[]{defaultLimit, defaultMaxAttempts}; // Default to Medium difficulty
+        }
+        
+        int choice = sc.nextInt();
+        sc.nextLine(); // Consume the newline left by nextInt()
+        int limit, maxAttempts;
+        switch (choice) {
+            case 1:
+                limit = 50;
+                maxAttempts = 10;
+                break;
+            case 2:
+                limit = 100;
+                maxAttempts = 5;
+                break;
+            case 3:
+                limit = 200;
+                maxAttempts = 3;
+                break;
+            default:
+                System.out.println("Invalid choice. Defaulting to Medium difficulty.");
+                limit = defaultLimit;
+                maxAttempts = defaultMaxAttempts;
+        }
+        return new int[]{limit, maxAttempts};
+    }
     public static void main(String[]args) {
         Scanner sc = new Scanner(System.in);
         Random random = new Random();
