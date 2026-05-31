@@ -8,7 +8,6 @@ public class NumberGuessingGame {
         int maxAttempts = 5; // Default max attempts, can be modified as needed
         int numberToGuess = random.nextInt(limit) ;
 
-
         // Welcome message and instructions
         System.out.println("Welcome to the Number Guessing Game!");
         System.out.println("You have to guess a number between 0 and " + (limit - 1) + ".");
@@ -16,7 +15,7 @@ public class NumberGuessingGame {
         int userGuess = getUserInput(sc);
         int attemptsTaken = 1;
 
-        // Loop until the user guesses the correct number
+        // Loop until the user guesses the correct number or exhausts the maximum attempts.
         while (userGuess != numberToGuess && attemptsTaken < maxAttempts) {
             if (userGuess < numberToGuess) {
                 System.out.println("Too low! Try again.");
@@ -27,6 +26,7 @@ public class NumberGuessingGame {
             attemptsTaken++;
         }
 
+        // If the user fails to guess the number within the maximum attempts, end the game.
         if (userGuess != numberToGuess) {
             System.out.println("Sorry!\nYou lost! \nYou've used all your attempts. \nThe correct number was: " + numberToGuess);
             return; // End the game if the user fails to guess the number
@@ -75,7 +75,6 @@ public class NumberGuessingGame {
         while (playAgain(sc));
         sc.close();
     }
-  
 }
 
         
