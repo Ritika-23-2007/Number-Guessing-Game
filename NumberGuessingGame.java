@@ -1,19 +1,25 @@
 import java.util.Scanner;
 import java.util.Random;
 public class NumberGuessingGame {
-    public static void playGame() {
+    public static void playGame(Scanner sc, Random random) {
 
         // Generate a random number between 0 and 99
-        Random random = new Random();
         int limit = 100;
         int numberToGuess = random.nextInt(limit) ;
+        int maxAttempts = -1; // Default max attempts, can be modified as needed
 
         // Welcome message and instructions
         System.out.println("Welcome to the Number Guessing Game!");
-        System.out.println("You have to guess a number between 0 and " + limit);
+        System.out.println("You have to guess a number between 0 and " + (limit - 1) + ".");
         System.out.println("Enter your guess: ");
-        Scanner sc = new Scanner(System.in);
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a positive integer.");
+            sc.nextLine(); // Consume the invalid input
+            return;
+        }
         int userGuess = sc.nextInt();
+        sc.nextLine(); // Consume the newline left by nextInt()
+
         int attemptsTaken = 1;
 
         // Loop until the user guesses the correct number
@@ -25,33 +31,48 @@ public class NumberGuessingGame {
                 System.out.println("Too high! Try again.");
             }
             System.out.println("Enter your guess: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a positive integer.");
+                sc.nextLine(); // Consume the invalid input
+                return;
+            }
             userGuess = sc.nextInt();
+            sc.nextLine(); // Consume the newline left by nextInt()
         }
 
-        // User guessed the correct number then end the game.
-        if (userGuess == numberToGuess) {
-            System.out.println("Congratulations! You've guessed the number!");
-            System.out.println("It took you " + attemptsTaken + " attempts.");
-            int score = getScore(attemptsTaken, -1); //-1 means default max attempts of 10
-            sc.close();
-            return;
-        }
-        sc.close();
+        //When User guessed the correct number then end the game.
+        System.out.println("Congratulations! You've guessed the number!");
+        System.out.println("It took you " + attemptsTaken + " attempts.");
+        getScore(attemptsTaken, maxAttempts);
     }
 
     public static int getScore(int attemptsTaken, int maxAttempts) {
         maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts;
-        int score = (maxAttempts + 1 - attemptsTaken) * 10;
+        int score = Math.max(0, maxAttempts + 1 - attemptsTaken) * 10;
         System.out.println("Your score is: " + score + " out of " + (maxAttempts * 10));
         return score;
     }
 
-    
+    public static boolean playAgain(Scanner sc) {
+        System.out.println("Do you want to play again? (yes/no)");
+        String response = sc.nextLine();
+        while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
+            System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+            response = sc.nextLine();
+        }
+        if (response.equalsIgnoreCase("yes")) {return true;}
+        System.out.println("Thank you for playing! Goodbye!");
+        return false;
+    }  
 
     public static void main(String[]args) {
-        playGame();
-        
-        //playAgain();
+        Scanner sc = new Scanner(System.in);
+        Random random = new Random();
+        do {playGame(sc, random);}
+        while (playAgain(sc));
+        sc.close();
     }
   
 }
+
+        
