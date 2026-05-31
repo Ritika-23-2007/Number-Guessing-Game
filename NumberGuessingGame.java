@@ -5,24 +5,31 @@ public class NumberGuessingGame {
 
         // Generate a random number between 0 and 99
         int limit = 100;
+        int maxAttempts = 5; // Default max attempts, can be modified as needed
         int numberToGuess = random.nextInt(limit) ;
-        int maxAttempts = -1; // Default max attempts, can be modified as needed
+
 
         // Welcome message and instructions
         System.out.println("Welcome to the Number Guessing Game!");
         System.out.println("You have to guess a number between 0 and " + (limit - 1) + ".");
+        System.out.println("You have " + maxAttempts + " attempts to guess the number. Good luck!");
         int userGuess = getUserInput(sc);
         int attemptsTaken = 1;
 
         // Loop until the user guesses the correct number
-        while (userGuess != numberToGuess) {
-            attemptsTaken++;
+        while (userGuess != numberToGuess && attemptsTaken < maxAttempts) {
             if (userGuess < numberToGuess) {
                 System.out.println("Too low! Try again.");
             } else {
                 System.out.println("Too high! Try again.");
             }
             userGuess = getUserInput(sc);
+            attemptsTaken++;
+        }
+
+        if (userGuess != numberToGuess) {
+            System.out.println("Sorry!\nYou lost! \nYou've used all your attempts. \nThe correct number was: " + numberToGuess);
+            return; // End the game if the user fails to guess the number
         }
 
         //When User guessed the correct number then end the game.
@@ -32,7 +39,7 @@ public class NumberGuessingGame {
     }
 
     public static int getScore(int attemptsTaken, int maxAttempts) {
-        maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts;
+        maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts; 
         int score = Math.max(0, maxAttempts + 1 - attemptsTaken) * 10;
         System.out.println("Your score is: " + score + " out of " + (maxAttempts * 10));
         return score;
