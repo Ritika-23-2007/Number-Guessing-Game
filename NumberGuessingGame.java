@@ -11,15 +11,7 @@ public class NumberGuessingGame {
         // Welcome message and instructions
         System.out.println("Welcome to the Number Guessing Game!");
         System.out.println("You have to guess a number between 0 and " + (limit - 1) + ".");
-        System.out.println("Enter your guess: ");
-        if (!sc.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a positive integer.");
-            sc.nextLine(); // Consume the invalid input
-            return;
-        }
-        int userGuess = sc.nextInt();
-        sc.nextLine(); // Consume the newline left by nextInt()
-
+        int userGuess = getUserInput(sc);
         int attemptsTaken = 1;
 
         // Loop until the user guesses the correct number
@@ -30,14 +22,7 @@ public class NumberGuessingGame {
             } else {
                 System.out.println("Too high! Try again.");
             }
-            System.out.println("Enter your guess: ");
-            if (!sc.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a positive integer.");
-                sc.nextLine(); // Consume the invalid input
-                return;
-            }
-            userGuess = sc.nextInt();
-            sc.nextLine(); // Consume the newline left by nextInt()
+            userGuess = getUserInput(sc);
         }
 
         //When User guessed the correct number then end the game.
@@ -63,7 +48,18 @@ public class NumberGuessingGame {
         if (response.equalsIgnoreCase("yes")) {return true;}
         System.out.println("Thank you for playing! Goodbye!");
         return false;
-    }  
+    } 
+    
+    public static int getUserInput(Scanner sc) {
+        System.out.println("Enter your guess: ");
+        while (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Please enter an integer.");
+            sc.nextLine(); // Consume the invalid input
+        }
+        int userInput = sc.nextInt();
+        sc.nextLine(); // Consume the newline left by nextInt()
+        return userInput;
+    }
 
     public static void main(String[]args) {
         Scanner sc = new Scanner(System.in);
