@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.util.ArrayList;
 public class NumberGuessingGame {
     public static void playGame(Scanner sc, Random random) {
 
@@ -7,12 +8,14 @@ public class NumberGuessingGame {
         int limit = 100;
         int maxAttempts = 5; // Default max attempts, can be modified as needed
         int numberToGuess = random.nextInt(limit) ;
+        ArrayList<Integer> previousGuesses = new ArrayList<>(maxAttempts);
 
         // Welcome message and instructions
         System.out.println("Welcome to the Number Guessing Game!");
         System.out.println("You have to guess a number between 0 and " + (limit - 1) + ".");
         System.out.println("You have " + maxAttempts + " attempts to guess the number. Good luck!");
         int userGuess = getUserInput(sc);
+        previousGuesses.add(userGuess);
         int attemptsTaken = 1;
 
         // Loop until the user guesses the correct number or exhausts the maximum attempts.
@@ -23,18 +26,21 @@ public class NumberGuessingGame {
                 System.out.println("Too high! Try again.");
             }
             userGuess = getUserInput(sc);
+            previousGuesses.add(userGuess);
             attemptsTaken++;
         }
 
         // If the user fails to guess the number within the maximum attempts, end the game.
         if (userGuess != numberToGuess) {
             System.out.println("Sorry!\nYou lost! \nYou've used all your attempts. \nThe correct number was: " + numberToGuess);
+            System.out.println("Your previous guesses were: " + previousGuesses);
             return; // End the game if the user fails to guess the number
         }
 
         //When User guessed the correct number then end the game.
         System.out.println("Congratulations! You've guessed the number!");
         System.out.println("It took you " + attemptsTaken + " attempts.");
+        System.out.println("Your previous guesses were: " + previousGuesses);
         getScore(attemptsTaken, maxAttempts);
     }
 
