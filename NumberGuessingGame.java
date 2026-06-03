@@ -27,13 +27,21 @@ public class NumberGuessingGame {
             previousGuesses.add(userGuess);
             attemptsTaken++;
 
-            if (userGuess < numberToGuess) {
+        // Provide a hint for last attempt if the user is about to exhaust all attempts.
+        if (attemptsTaken == maxAttempts - 1) {
+            System.out.println("This is your last attempt! Here's a hint:");
+            hintSystem(numberToGuess);
+        }
+
+            // Provide feedback to the user after each guess except the last.
+            if (userGuess < numberToGuess && attemptsTaken < maxAttempts -1 ) {
                 System.out.println("Too low! Try again.");
-            } else if (userGuess > numberToGuess) {
+            } else if (userGuess > numberToGuess && attemptsTaken < maxAttempts -1) {
                 System.out.println("Too high! Try again.");
-            } else {
+            } else if (userGuess == numberToGuess) {
                 break; // User guessed the correct number, exit the loop.
             }
+            
         }
         
 
@@ -114,6 +122,15 @@ public class NumberGuessingGame {
         }
         return new int[]{limit, maxAttempts};
     }
+
+    public static void hintSystem(int numberToGuess) {
+        if (numberToGuess % 2 == 0) {
+            System.out.println("Hint: The number is even.");
+        } else {
+            System.out.println("Hint: The number is odd.");
+        }
+    }
+
     public static void main(String[]args) {
         Scanner sc = new Scanner(System.in);
         Random random = new Random();
