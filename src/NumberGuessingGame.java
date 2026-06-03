@@ -124,7 +124,7 @@ public class NumberGuessingGame {
     public static void hintSystem(int numberToGuess, int attemptsLeft) {
         switch (attemptsLeft) {
             case 1:
-                System.out.println("Hint: The number is between" + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + " when divided by 10.");
+                System.out.println("Hint: The number is between " + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + " when divided by 10.");
                 break;
             case 2:
                 System.out.println("Hint: The number is " + (numberToGuess % 2 == 0 ? "even." : "odd."));
