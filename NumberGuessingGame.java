@@ -21,23 +21,21 @@ public class NumberGuessingGame {
 
         //loop runs until the user guesses the number or exhausts all attempts.
         int attemptsTaken = 0;
+        int attemptsLeft = maxAttempts - attemptsTaken;
         int userGuess = -1; // Initialize userGuess to an invalid value
         while (attemptsTaken < maxAttempts) {
             userGuess = getUserInput(sc);
             previousGuesses.add(userGuess);
             attemptsTaken++;
-
-        // Provide a hint for last attempt if the user is about to exhaust all attempts.
-        if (attemptsTaken == maxAttempts - 1) {
-            System.out.println("This is your last attempt! Here's a hint:");
-            hintSystem(numberToGuess);
-        }
+            attemptsLeft--;        
 
             // Provide feedback to the user after each guess except the last.
-            if (userGuess < numberToGuess && attemptsTaken < maxAttempts -1 ) {
+            if (userGuess < numberToGuess && attemptsTaken < maxAttempts) {
                 System.out.println("Too low! Try again.");
-            } else if (userGuess > numberToGuess && attemptsTaken < maxAttempts -1) {
+                hintSystem(numberToGuess , attemptsLeft);
+            } else if (userGuess > numberToGuess && attemptsTaken < maxAttempts) {
                 System.out.println("Too high! Try again.");
+                hintSystem(numberToGuess , attemptsLeft);
             } else if (userGuess == numberToGuess) {
                 break; // User guessed the correct number, exit the loop.
             }
@@ -123,11 +121,16 @@ public class NumberGuessingGame {
         return new int[]{limit, maxAttempts};
     }
 
-    public static void hintSystem(int numberToGuess) {
-        if (numberToGuess % 2 == 0) {
-            System.out.println("Hint: The number is even.");
-        } else {
-            System.out.println("Hint: The number is odd.");
+    public static void hintSystem(int numberToGuess, int attemptsLeft) {
+        switch (attemptsLeft) {
+            case 1:
+                System.out.println("Hint: The number is between" + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + " when divided by 10.");
+                break;
+            case 2:
+                System.out.println("Hint: The number is " + (numberToGuess % 2 == 0 ? "even." : "odd."));
+                break;
+            default:
+                break;
         }
     }
 
