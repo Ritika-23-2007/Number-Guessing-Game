@@ -1,8 +1,9 @@
 import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Collections;
 public class NumberGuessingGame {
-    public static void playGame(Scanner sc, Random random) {
+    public static int playGame(Scanner sc, Random random) {
 
         // Welcome message and instructions.
         System.out.println("Welcome to the Number Guessing Game!");
@@ -47,20 +48,32 @@ public class NumberGuessingGame {
         if (userGuess != numberToGuess) {
             System.out.println("Sorry!\nYou lost! \nYou've used all your attempts. \nThe correct number was: " + numberToGuess);
             System.out.println("Your previous guesses were: " + previousGuesses);
-            return; // End the game if the user fails to guess the number
-        }
+            }
 
         //When User guessed the correct number then end the game.
-        System.out.println("Congratulations! You've guessed the number!");
-        System.out.println("It took you " + attemptsTaken + " attempts.");
-        System.out.println("Your previous guesses were: " + previousGuesses);
-        getScore(attemptsTaken, maxAttempts);
+        else {
+            System.out.println("Congratulations! You've guessed the number!");
+            System.out.println("It took you " + attemptsTaken + " attempts.");
+            System.out.println("Your previous guesses were: " + previousGuesses);
+        }
+        //Calculate and display the score based on the number of attempts taken and the maximum attempts allowed.
+        return getScore(attemptsTaken, maxAttempts);
+
     }
 
     public static int getScore(int attemptsTaken, int maxAttempts) {
-        maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts; 
-        int score = Math.max(0, maxAttempts + 1 - attemptsTaken) * 10;
-        System.out.println("Your score is: " + score + " out of " + (maxAttempts * 10));
+        maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts; //-ve max attempts represent default value.
+        int attemptsLeft = maxAttempts - attemptsTaken;
+        if (attemptsLeft == maxAttempts - 1) {
+            System.out.println("Your score is: 100 out of 100");
+            return 100;
+        }
+        if (attemptsLeft == 0) {
+            System.out.println("Your score is: 0 out of 100");
+            return 0;
+        }
+        int score = (attemptsLeft * 100) / maxAttempts;
+        System.out.println("Your score is: " + score + " out of " + (100));
         return score;
     }
 
@@ -134,11 +147,36 @@ public class NumberGuessingGame {
         }
     }
 
+    public static void displayScores(ArrayList<Integer> scores) {
+
+        //print the scores of all games played in the current session.
+        System.out.print("Scores of all games played:");
+        System.out.println(scores);
+        
+
+        //Calculate and display the highest score across all games played.
+        int highestScore = Collections.max(scores);
+        System.out.println("Highest score across all games: " + highestScore);
+
+        //Calculate and display the total points across all games played.
+        int totalPoints = 0;
+        for (int score : scores) {
+            totalPoints += score;
+        }
+        System.out.println("Total points across all games: " + totalPoints);
+    }
+
     public static void main(String[]args) {
         Scanner sc = new Scanner(System.in);
         Random random = new Random();
-        do {playGame(sc, random);}
+        ArrayList<Integer> scores = new ArrayList<>();
+        int currentScore ;
+        do {
+            currentScore = playGame(sc, random);
+            scores.add(currentScore);
+        }
         while (playAgain(sc));
+        displayScores(scores);
         sc.close();
     }
 }
