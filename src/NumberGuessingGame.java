@@ -3,6 +3,41 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 public class NumberGuessingGame {
+
+    public static int[] setDifficulty(Scanner sc) {
+        int defaultLimit = 100;
+        int defaultMaxAttempts = 5;
+        System.out.println("Write number to set difficulty: (1) Easy (2) Medium (3) Hard");
+        if (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Defaulting to Medium difficulty.");
+            sc.nextLine(); // Consume the invalid input
+            return new int[]{defaultLimit, defaultMaxAttempts}; // Default to Medium difficulty
+        }
+        
+        int choice = sc.nextInt();
+        sc.nextLine(); // Consume the newline left by nextInt()
+        int limit, maxAttempts;
+        switch (choice) {
+            case 1:
+                limit = 50;
+                maxAttempts = 10;
+                break;
+            case 2:
+                limit = 100;
+                maxAttempts = 5;
+                break;
+            case 3:
+                limit = 200;
+                maxAttempts = 3;
+                break;
+            default:
+                System.out.println("Invalid choice. Defaulting to Medium difficulty.");
+                limit = defaultLimit;
+                maxAttempts = defaultMaxAttempts;
+        }
+        return new int[]{limit, maxAttempts};
+    }
+
     public static int playGame(Scanner sc, Random random) {
 
         // Welcome message and instructions.
@@ -61,6 +96,30 @@ public class NumberGuessingGame {
 
     }
 
+    public static int getUserInput(Scanner sc) {
+        System.out.println("Enter your guess: ");
+        while (!sc.hasNextInt()) {
+            System.out.println("Invalid input. Please enter an integer.");
+            sc.nextLine(); // Consume the invalid input
+        }
+        int userInput = sc.nextInt();
+        sc.nextLine(); // Consume the newline left by nextInt()
+        return userInput;
+    }
+
+    public static void hintSystem(int numberToGuess, int attemptsLeft) {
+        switch (attemptsLeft) {
+            case 1:
+                System.out.println("Hint: The number is between " + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + " when divided by 10.");
+                break;
+            case 2:
+                System.out.println("Hint: The number is " + (numberToGuess % 2 == 0 ? "even." : "odd."));
+                break;
+            default:
+                break;
+        }
+    }
+
     public static int getScore(int attemptsTaken, int maxAttempts) {
         maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts; //-ve max attempts represent default value.
         int attemptsLeft = maxAttempts - attemptsTaken;
@@ -89,64 +148,6 @@ public class NumberGuessingGame {
         return false;
     } 
     
-    public static int getUserInput(Scanner sc) {
-        System.out.println("Enter your guess: ");
-        while (!sc.hasNextInt()) {
-            System.out.println("Invalid input. Please enter an integer.");
-            sc.nextLine(); // Consume the invalid input
-        }
-        int userInput = sc.nextInt();
-        sc.nextLine(); // Consume the newline left by nextInt()
-        return userInput;
-    }
-
-    public static int[] setDifficulty(Scanner sc) {
-        int defaultLimit = 100;
-        int defaultMaxAttempts = 5;
-        System.out.println("Write number to set difficulty: (1) Easy (2) Medium (3) Hard");
-        if (!sc.hasNextInt()) {
-            System.out.println("Invalid input. Defaulting to Medium difficulty.");
-            sc.nextLine(); // Consume the invalid input
-            return new int[]{defaultLimit, defaultMaxAttempts}; // Default to Medium difficulty
-        }
-        
-        int choice = sc.nextInt();
-        sc.nextLine(); // Consume the newline left by nextInt()
-        int limit, maxAttempts;
-        switch (choice) {
-            case 1:
-                limit = 50;
-                maxAttempts = 10;
-                break;
-            case 2:
-                limit = 100;
-                maxAttempts = 5;
-                break;
-            case 3:
-                limit = 200;
-                maxAttempts = 3;
-                break;
-            default:
-                System.out.println("Invalid choice. Defaulting to Medium difficulty.");
-                limit = defaultLimit;
-                maxAttempts = defaultMaxAttempts;
-        }
-        return new int[]{limit, maxAttempts};
-    }
-
-    public static void hintSystem(int numberToGuess, int attemptsLeft) {
-        switch (attemptsLeft) {
-            case 1:
-                System.out.println("Hint: The number is between " + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + " when divided by 10.");
-                break;
-            case 2:
-                System.out.println("Hint: The number is " + (numberToGuess % 2 == 0 ? "even." : "odd."));
-                break;
-            default:
-                break;
-        }
-    }
-
     public static void displayScores(ArrayList<Integer> scores) {
 
         //print the scores of all games played in the current session.
