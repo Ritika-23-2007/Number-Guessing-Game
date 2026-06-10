@@ -7,6 +7,7 @@ public class NumberGuessingGame {
     public static int[] setDifficulty(Scanner sc) {
         int defaultLimit = 100;
         int defaultMaxAttempts = 5;
+        int limit, maxAttempts;
         System.out.println("Write number to set difficulty: (1) Easy (2) Medium (3) Hard");
         if (!sc.hasNextInt()) {
             System.out.println("Invalid input. Defaulting to Medium difficulty.");
@@ -16,7 +17,6 @@ public class NumberGuessingGame {
         
         int choice = sc.nextInt();
         sc.nextLine(); // Consume the newline left by nextInt()
-        int limit, maxAttempts;
         switch (choice) {
             case 1:
                 limit = 50;
@@ -57,28 +57,31 @@ public class NumberGuessingGame {
 
         //loop runs until the user guesses the number or exhausts all attempts.
         int attemptsTaken = 0;
-        int attemptsLeft = maxAttempts - attemptsTaken;
+        int attemptsLeft = maxAttempts;
         int userGuess = -1; // Initialize userGuess to an invalid value
         while (attemptsTaken < maxAttempts) {
             userGuess = getUserInput(sc);
             previousGuesses.add(userGuess);
+            
+            if (userGuess == numberToGuess) {
+                break; // User guessed the correct number, exit the loop.
+            }
+            
             attemptsTaken++;
-            attemptsLeft--;        
-
+            attemptsLeft--;
+            
             // Provide feedback to the user after each guess except the last.
+            //Since attemptsTaken is incremented before the feedback, we check if it's less than maxAttempts to ensure feedback is given only when there are attempts left.
+
             if (userGuess < numberToGuess && attemptsTaken < maxAttempts) {
                 System.out.println("Too low! Try again.");
                 hintSystem(numberToGuess , attemptsLeft);
             } else if (userGuess > numberToGuess && attemptsTaken < maxAttempts) {
                 System.out.println("Too high! Try again.");
                 hintSystem(numberToGuess , attemptsLeft);
-            } else if (userGuess == numberToGuess) {
-                break; // User guessed the correct number, exit the loop.
             }
-            
         }
         
-
         // If the user fails to guess the number within the maximum attempts, end the game.
         if (userGuess != numberToGuess) {
             System.out.println("Sorry!\nYou lost! \nYou've used all your attempts. \nThe correct number was: " + numberToGuess);
@@ -93,7 +96,6 @@ public class NumberGuessingGame {
         }
         //Calculate and display the score based on the number of attempts taken and the maximum attempts allowed.
         return getScore(attemptsTaken, maxAttempts);
-
     }
 
     public static int getUserInput(Scanner sc) {
@@ -110,7 +112,7 @@ public class NumberGuessingGame {
     public static void hintSystem(int numberToGuess, int attemptsLeft) {
         switch (attemptsLeft) {
             case 1:
-                System.out.println("Hint: The number is between " + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + " when divided by 10.");
+                System.out.println("Hint: The number is between " + ((numberToGuess / 10) * 10) + " and " + (((numberToGuess / 10) * 10) + 10) + ".");
                 break;
             case 2:
                 System.out.println("Hint: The number is " + (numberToGuess % 2 == 0 ? "even." : "odd."));
@@ -123,14 +125,6 @@ public class NumberGuessingGame {
     public static int getScore(int attemptsTaken, int maxAttempts) {
         maxAttempts = (maxAttempts <= 0) ? 10 : maxAttempts; //-ve max attempts represent default value.
         int attemptsLeft = maxAttempts - attemptsTaken;
-        if (attemptsLeft == maxAttempts - 1) {
-            System.out.println("Your score is: 100 out of 100");
-            return 100;
-        }
-        if (attemptsLeft == 0) {
-            System.out.println("Your score is: 0 out of 100");
-            return 0;
-        }
         int score = (attemptsLeft * 100) / maxAttempts;
         System.out.println("Your score is: " + score + " out of " + (100));
         return score;
