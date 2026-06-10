@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 public class NumberGuessingGame {
 
+    //the following methods are called inside playGame() method and the rest are called inside main() method.
+    //setDifficulty() method
+    //getUserInput() method
+    //hintSystem() method
+    //getScore() method
+
     public static int[] setDifficulty(Scanner sc) {
         int defaultLimit = 100;
         int defaultMaxAttempts = 5;
@@ -46,6 +52,7 @@ public class NumberGuessingGame {
 
         // Set the difficulty level and the parametres for the game.
         int[] difficultySettings = setDifficulty(sc);
+        //in setDifficulty(), difficultySettings[0] is the limit for the random number and difficultySettings[1] is the maximum attempts allowed.
         int limit = difficultySettings[0];
         int maxAttempts = difficultySettings[1];
         ArrayList<Integer> previousGuesses = new ArrayList<>(maxAttempts);
@@ -91,7 +98,7 @@ public class NumberGuessingGame {
         //When User guessed the correct number then end the game.
         else {
             System.out.println("Congratulations! You've guessed the number!");
-            System.out.println("It took you " + attemptsTaken + " attempts.");
+            System.out.println("It took you " + (attemptsTaken + 1) + " attempts."); //for score calculation, we considered only wrong attempts, so we added 1 to attemptsTaken to include the correct guess.
             System.out.println("Your previous guesses were: " + previousGuesses);
         }
         //Calculate and display the score based on the number of attempts taken and the maximum attempts allowed.
